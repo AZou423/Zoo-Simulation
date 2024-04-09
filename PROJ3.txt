@@ -1,0 +1,26 @@
+I found this project very interesting as I have never really worked with multithreading or IO.
+
+CSV Reading:
+
+To implement a method in the Zoo class that can read input from a CSV file I utilizied a BufferedReader and FileReader and a while loop
+to read the file line by line. Combining this with Java's split() method I seperated values by commas storing them into an array of Strings.
+Values stored in index 0 of the String array represented the type of animal (species) and values in index 1 of the array represented the name
+of the animal. I then utilized a switch case depending on the species of the animal to create instances for each animal in the CSV file based 
+on species and the name. At the end I close the the BufferedReader and catch any exceptions thrown by the try block needed to create a BufferedReader.
+
+run() method
+
+Originally in this method I had an enhanced for loop because I thought it would make it easier to loop through and print the animals. However
+I realized that in order to have Handlers feed each animal only once this wouldn't work since it would've required a synchronized block and
+with an enhanced for loop each Handler would be looping through all the animals. Instead I changed it to a normal for loop added a new volatile
+field to the Zoo class to track the index of a animal in the LinkedList animals. The synchronized block ensures that only one Handler accesses 
+the Zoo at a time to get an animal to handle and incrementing the animal index for the next handler. As long as the animal to handle isn't null
+then the Handler should "feed it". Because of the synchronized block and the use of linkedlist's .get() method with a volatile variable and incrementing
+the index each time it ensures no animal could be fed twice.
+
+feedingTime(int numHandlers) method
+
+For this method I thought it would be best if I created an array of Handlers with a size of numHandlers and access them through indexing. With a 
+for loop I set instances of handlers[i] equal to new instances Handlers and start their threads. Additionally I also use a for loop to join()
+all the handlers.
+

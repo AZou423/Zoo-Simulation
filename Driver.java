@@ -3,10 +3,10 @@
    When you add more animal class types you'll need to import their packages as well
 */
 import animal.*;
-import animal.mammal.*;
-import animal.reptile.*;
-import animal.bird.*;
-import animal.fish.*;
+// import animal.mammal.*;
+// import animal.reptile.*;
+// import animal.bird.*;
+// import animal.fish.*;
 public class Driver{
 
     public static void stats(Animal a){

@@ -1,14 +1,20 @@
 import animal.*;
 import animal.mammal.*;
 import animal.reptile.*;
+import linkedlist.LinkedList;
 import animal.bird.*;
 import animal.fish.*;
-import linkedlist.LinkedList;
+
+import java.io.BufferedReader;
+// import java.io.FileNotFoundException;
+// import java.io.IOException;
+import java.io.FileReader;
 import java.lang.Thread;
 
 public class Zoo{
     public static int numThreads = 1; //Useful for getting easy access to the number of threads
     private LinkedList<Animal> animalLedger;
+    private volatile int animalIndex = 0;
     public static enum SortType{
 	NAME, WEIGHT
     }
@@ -17,8 +23,22 @@ public class Zoo{
 	int id;
 	LinkedList<Animal> animals;
 	public void run(){
-	    //TODO: Have this Handler feed an Animal from animals. Make sure the same animal doesn't get fed twice!
-	}
+    //TODO Handlers and make sure no animal is fed twice
+        for(int i = 0; i < animals.size(); i++){
+            Animal a = null;
+            synchronized(Zoo.this){
+                a = animals.get(animalIndex);
+                animalIndex++;
+            }
+            if(a != null){
+                System.out.println("Handler " + id + " is feeding " + a.eat() + " to " + a.getName() + " the " + a.getSpecies());
+                try{
+                    Thread.sleep(1000);
+                }
+                catch(InterruptedException e){}
+            }
+        }
+    }
 	
 	public Handler(int id, LinkedList<Animal> animals){
 	    this.id = id;
@@ -28,7 +48,18 @@ public class Zoo{
 
     public void feedingTime(int numHandlers){
         //Create numHandlers number of Handlers, start() them, and join() on all of them
-    }
+        Handler[] handlers = new Handler[numHandlers];
+        for(int i = 0; i < numHandlers; i ++){
+            handlers[i] = new Handler(i, this.animalLedger);
+            handlers[i].start();
+        }
+        for (int i = 0; i < numHandlers; i++) {
+            try {
+                handlers[i].join();
+            } 
+            catch (Exception e) {}
+        }
+    }  
 
     
     /**
@@ -126,7 +157,55 @@ public class Zoo{
 
     public Zoo(String fileName){
 	this.animalLedger = new LinkedList<Animal>();
+    String line = "";
 	//TODO: Build a Zoo from an input csv
+    try{
+        BufferedReader br = new BufferedReader(new FileReader(fileName));
+        while((line = br.readLine()) != null){
+            String[] values = line.split(",");
+            String animalType = values[0];
+            String animalName = values[1];
+            
+             switch(animalType){
+                case "Lion":
+                    Lion newLion = new Lion(animalName);
+                    this.animalLedger.append(newLion);
+                    break;
+                case "Giraffe":
+                    Giraffe newGiraffe = new Giraffe(animalName);
+                    this.animalLedger.append(newGiraffe);
+                    break;
+                case "Parrot":
+                    Parrot newParrot = new Parrot(animalName);
+                    this.animalLedger.append(newParrot);
+                    break;
+                case "Penguin":
+                    Penguin newPenguin = new Penguin(animalName);
+                    this.animalLedger.append(newPenguin);
+                    break;
+                case "Clownfish":
+                    Clownfish newClownfish = new Clownfish(animalName);
+                    this.animalLedger.append(newClownfish);
+                    break;
+                case "Eel":
+                    Eel newEel = new Eel(animalName);
+                    this.animalLedger.append(newEel);
+                    break;
+                case "Iguana":
+                    Iguana newIguana = new Iguana(animalName);
+                    this.animalLedger.append(newIguana);
+                    break;
+                case "Snake":
+                    Snake newSnake = new Snake(animalName);
+                    this.animalLedger.append(newSnake);
+                    break;
+             }
+        }
+        br.close();
+    }
+    catch(Exception e){
+        System.out.println(e);
+    }
     }
     
 }
