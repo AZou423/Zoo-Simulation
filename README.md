@@ -1,3 +1,6 @@
-[![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-24ddc0f5d75046c5622901739e7c5dd533143b0c8e959d652212380cedb1ea36.svg)](https://classroom.github.com/a/T7-yHexu)
-# Project 3 (Spring 2024)
-More details can be found in the project pdf
+# Coding Project for CS210
+
+Simulates a Zoo containing animals from either "small.csv", "medium.csv", "large.csv" or "huge.csv"
+
+Uses multithreading to be able to feed animals simultaneously and IO manipulation to properly handle the animals in the CSV files.
+Also uses generics to create linked lists of type "Animal" used for the animalLedger linked list, Exeception catching/handling for multithreading and inheritance for the different types of animals in the Zoo.
